@@ -2,6 +2,7 @@
 
 <template>
   <p class="home-title">个性化学习中心</p>
+  <p class="home-subtitle">让每一位学习者都能获得最适合自己的教育!</p>
   <div class="container">
     <div class="card">
       <div class="icon-container">
@@ -56,6 +57,13 @@
   text-align: center;
   font-size: 50px;
   font-weight: bold;
+}
+
+/* 副标题 */
+.home-subtitle {
+  text-align: center;
+  font-size: 30px;
+  margin-top: -10px;
 }
 
 .container {
