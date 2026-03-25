@@ -1,0 +1,13 @@
+/* 自定义全局字体 */
+@font-face {
+  font-family: 'LXGWZhenKaiGB-Regular'; /* 自定义字体名称 */
+  src: url('./font/LXGWZhenKaiGB-Regular.ttf') format('truetype'); /* 字体文件路径 */
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* 优化字体加载性能 */
+}
+
+/* 全局应用自定义字体 */
+* {
+  font-family: 'LXGWZhenKaiGB-Regular', sans-serif; /*  fallback 字体 */
+}
