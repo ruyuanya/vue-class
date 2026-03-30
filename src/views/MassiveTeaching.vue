@@ -1,13 +1,10 @@
 <template>
-  <div class="massive-teaching-page">
-    <div class="header">
-      <h1>大规模因材施教系统</h1>
-    </div>
-      
-    <div class="back-button">
-      <button @click="goBack">返回首页</button>
-    </div>
+  <div class="back-button">
+    <button @click="goBack">返回首页</button>
   </div>
+  <h1 class="teaching-title">AI助力大规模因材施教</h1>
+  <h2 class="teaching-subtitle">基于AI的教学辅助系统，为学生量身定制学习路径</h2>
+  <div class="container"></div>
 </template>
 
 <script setup lang="ts">
@@ -19,23 +16,26 @@ const goBack = () => {
 </script>
 
 <style scoped>
-.massive-teaching-page {
-  padding: 40px;
-  max-width: 800px;
+/* 主标题 */
+.teaching-title {
+  font-size: 60px;
+  color: #1ba766;
   margin: 0 auto;
   text-align: center;
 }
-.header {
-  margin-bottom: 60px;
+
+/* 副标题 */
+.teaching-subtitle {
+  font-size: 25px;
+  text-align: center;
 }
-.header h1 {
-  font-size: 36px;
-  color: #1ba766;
-  margin-bottom: 20px;
-}
+
+/* 返回首页按钮样式 */
 .back-button {
+  margin-left: 40px;
   margin-top: 40px;
 }
+
 .back-button button {
   background-color: #1ba766;
   color: white;
@@ -46,6 +46,7 @@ const goBack = () => {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
 .back-button button:hover {
   background-color: #158c4f;
 }
