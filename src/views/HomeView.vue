@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card" @click="goToAdaptiveStudy">
       <div class="icon-container">
         <svg t="1774422508451" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
           p-id="8428" width="200" height="200">
@@ -54,6 +54,9 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const goToMassiveTeaching = () => {
   router.push('/massive-teaching')
+}
+const goToAdaptiveStudy = () => {
+  router.push('/adaptive-study')
 }
 </script>
 
