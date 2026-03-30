@@ -5,8 +5,5 @@
 </script>
 
 <style scoped>
-/* 标题 */
-.home-title {
-  text-align: center;
-}
+
 </style>
