@@ -109,7 +109,7 @@ const goToAdaptiveStudy = () => {
 /* 卡片 */
 .card {
   width: 600px;
-  height: 400px;
+  height: 360px;
   padding: 20px;
   background-color: #fff;
   border-radius: 15px;
