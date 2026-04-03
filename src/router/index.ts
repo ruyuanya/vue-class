@@ -3,6 +3,7 @@ import Home from '../views/HomeView.vue'
 import MassiveTeaching from '../views/MassiveTeaching.vue'
 import AdaptiveStudy from '../views/AdaptiveStudy.vue'
 import WorkspaceView from '../views/WorkspaceView.vue'
+import LoginView from '../views/LoginView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL || '/'),
@@ -26,6 +27,11 @@ const router = createRouter({
       path: '/workspace',
       name: 'Workspace',
       component: WorkspaceView,
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: LoginView,
     },
   ],
 })

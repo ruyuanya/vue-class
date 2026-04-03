@@ -1,5 +1,7 @@
 <template>
+    <!-- 这里是整个导航栏 -->
     <div class="container-nav">
+        <!-- 这里是自适应学习容器 -->
         <div class="icon-study">
             <div class="box-icon">
                 <div class="icon-container">
@@ -18,7 +20,7 @@
                 <div class="text-learning">smart learning</div>
             </div>
         </div>
-
+        <!-- 这里是登录注册按钮容器 -->
         <div class="auth-buttons">
             <button class="auth-btn login-btn">登录</button>
             <button class="auth-btn register-btn">注册</button>
