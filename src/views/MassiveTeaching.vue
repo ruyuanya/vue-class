@@ -5,7 +5,7 @@
   <h1 class="teaching-title">AI助力大规模因材施教</h1>
   <h2 class="teaching-subtitle">基于AI的教学辅助系统，为学生量身定制学习路径</h2>
   <div class="container">
-    <div class="card">
+    <div class="card" @click="gotoWorkspace">
       <div class="icon-container">
         <svg t="1775028580194" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
           p-id="4937">
@@ -79,6 +79,10 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const goBack = () => {
   router.push('/')
+}
+
+const gotoWorkspace = () => {
+  router.push('/Workspace')
 }
 </script>
 
