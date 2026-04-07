@@ -64,31 +64,38 @@
 
         <!-- 这里是登录注册按钮容器 -->
         <div class="auth-buttons">
-            <button class="auth-btn login-btn">登录</button>
-            <button class="auth-btn register-btn">注册</button>
+            <button class="auth-btn login-btn" @click="gotoLogin">登录</button>
+            <button class="auth-btn register-btn" @click="goToRegister">注册</button>
         </div>
     </div>
 
     <!-- 内容区域 -->
     <div class="content-area">
         <div v-if="activeTab === 'center'">
-            <div class="content-box">你好，这是学习中心内容</div>
+            <div class="content-box">这是学习中心内容</div>
         </div>
         <div v-else-if="activeTab === 'path'">
-            <div class="content-box">你好，这是学习路径内容</div>
+            <div class="content-box">这是学习路径内容</div>
         </div>
         <div v-else-if="activeTab === 'map'">
-            <div class="content-box">你好，这是知识图谱内容</div>
+            <div class="content-box">这是知识图谱内容</div>
         </div>
         <div v-else-if="activeTab === 'ai'">
-            <div class="content-box">你好，这是AI导师内容</div>
+            <div class="content-box">这是AI导师内容</div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const gotoLogin = () => {
+    router.push('/login')
+}
+const goToRegister = () => {
+    router.push('/register')
+}
 // 当前激活的标签
 const activeTab = ref('center')
 </script>
