@@ -40,10 +40,8 @@ const handleLogin = () => {
     router.push('/workspace')
 }
 
-// 跳转到注册页面
 const goToRegister = () => {
-    // 这里可以跳转到注册页面
-    console.log('跳转到注册页面')
+    router.push('/register')
 }
 </script>
 
