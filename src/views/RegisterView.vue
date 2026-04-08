@@ -29,24 +29,54 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-
+import { UserRegister } from '../services/api'
 const router = useRouter()
 
 // 表单数据
 const username = ref('')
 const password = ref('')
 const confirmPassword = ref('')
+const email = ref('')
+const isLoading = ref(false)
+const errorMessage = ref('')
+
 
 // 注册处理
-const handleRegister = () => {
-    // 这里可以添加注册逻辑
-    console.log('注册信息:', {
-        username: username.value,
-        password: password.value,
-        confirmPassword: confirmPassword.value
-    })
-    // 模拟注册成功
-    router.push('/login')
+const handleRegister = async () => {
+    if (!username.value || !password.value) {
+        errorMessage.value = '请输入用户名和密码'
+        return
+    }
+    
+    if (password.value !== confirmPassword.value) {
+        errorMessage.value = '两次输入的密码不一致'
+        return
+    }
+    
+    if (password.value.length < 6) {
+        errorMessage.value = '密码长度不能少于6位'
+        return
+    }
+    
+    isLoading.value = true
+    errorMessage.value = ''
+    
+    try {
+        const result = await UserRegister(username.value, password.value, email.value)
+        
+        if (result.code === 200) {
+            // 注册成功
+            alert('注册成功！请登录')
+            router.push('/login')
+        } else {
+            errorMessage.value = result.message || '注册失败'
+        }
+    } catch (error) {
+        console.error('注册错误:', error)
+        errorMessage.value = '注册失败，请稍后重试'
+    } finally {
+        isLoading.value = false
+    }
 }
 
 // 跳转到登录页面

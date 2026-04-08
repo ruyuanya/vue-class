@@ -108,18 +108,29 @@ const gotoWorkspace = () => {
 }
 
 .back-button button {
-  background-color: #1ba766;
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+    width: 80px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: hwb(160 10% 25%);
+    color: white;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .back-button button:hover {
-  background-color: #158c4f;
+    background-color: hwb(160 5% 20%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.back-button button:active {
+    transform: translateY(0);
 }
 
 .container {
