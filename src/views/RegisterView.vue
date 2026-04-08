@@ -1,6 +1,9 @@
 <template>
     <!-- 注册页面 -->
     <div class="register-container">
+        <div class="back-button">
+            <button @click="goBack">返回</button>
+        </div>
         <div class="register-card">
             <h1 class="register-title">注册</h1>
 
@@ -47,23 +50,23 @@ const handleRegister = async () => {
         errorMessage.value = '请输入用户名和密码'
         return
     }
-    
+
     if (password.value !== confirmPassword.value) {
         errorMessage.value = '两次输入的密码不一致'
         return
     }
-    
+
     if (password.value.length < 6) {
         errorMessage.value = '密码长度不能少于6位'
         return
     }
-    
+
     isLoading.value = true
     errorMessage.value = ''
-    
+
     try {
         const result = await UserRegister(username.value, password.value, email.value)
-        
+
         if (result.code === 200) {
             // 注册成功
             alert('注册成功！请登录')
@@ -82,6 +85,10 @@ const handleRegister = async () => {
 // 跳转到登录页面
 const goToLogin = () => {
     router.push('/login')
+}
+
+const goBack = () => {
+    router.push('/')
 }
 </script>
 
@@ -181,5 +188,39 @@ const goToLogin = () => {
 .login-btn:hover {
     color: #158c4f;
     text-decoration: underline;
+}
+
+/* 返回按钮 */
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+}
+
+.back-button button {
+    width: 80px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: hwb(160 10% 25%);
+    color: white;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-button button:hover {
+    background-color: hwb(160 5% 20%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.back-button button:active {
+    transform: translateY(0);
 }
 </style>
