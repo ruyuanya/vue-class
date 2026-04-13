@@ -12,6 +12,10 @@
             </div>
 
             <div class="form-group">
+                <input type="text" v-model="email" placeholder="邮箱" class="form-input">
+            </div>
+            
+            <div class="form-group">
                 <input type="password" v-model="password" placeholder="密码" class="form-input">
             </div>
 
