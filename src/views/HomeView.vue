@@ -49,6 +49,7 @@
   <!-- 主要内容区域 -->
   <div class="main-content">
     <div class="container">
+      <div class="card-list">
       <div class="card" @click="goToMassiveTeaching">
         <div class="icon-container">
           <svg t="1774422027809" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -71,6 +72,8 @@
           <span class="arrow">→</span>
         </div>
       </div>
+      
+
 
       <div class="card" @click="goToAdaptiveStudy">
         <div class="icon-container">
@@ -94,6 +97,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -268,33 +272,48 @@ text-align: center;
 .main-content {
   margin-top: 120px;
   padding: 20px;
+  display: flex;
+  justify-content: center;
 }
 
+/* 容器：居中并限制最大宽度 */
 .container {
-  width: 800px;
-  height: 400px;
-  margin-left: 328px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 40px auto; /* 居中并增加上间距 */
   padding: 20px 25px;
   border-radius: 15px;
   margin-bottom: 20px;
   transition: all 0.3s ease, border-color 0.3s ease, border-width 0.3s ease;
+  box-sizing: border-box;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 70px;
+  justify-content: center; /* 保证内部内容水平居中 */
+}
+
+/* 卡片列表：左右对称、水平居中，卡片间距 50px */
+.card-list {
+  display: flex;
+  gap: 50px; /* 两个 card 之间保持 50px */
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1100px;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
 }
 
 /* 卡片 */
 .card {
-  width: 600px;
+  flex: 0 0 520px; /* 固定宽度，保证左右对称 */
+  max-width: 520px; /* 控制卡片最大宽度，保证两侧对称 */
+  width: 100%;
   height: 360px;
   padding: 20px;
   background-color: #fff;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  margin-left: 20px;
   border: 2px solid transparent;
-  transition: all 0.5s ease
+  transition: all 0.5s ease;
 }
 
 /* 卡片动画 */
@@ -365,5 +384,19 @@ text-align: center;
 /* 移除原有的登录注册按钮样式 */
 .auth-buttons {
   display: none;
+}
+
+/* 响应式：窄屏时改为垂直堆叠 */
+@media (max-width: 1100px) {
+  .card-list {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  .card {
+    flex: 0 0 auto;
+    width: 90%;
+    max-width: 520px;
+  }
 }
 </style>
