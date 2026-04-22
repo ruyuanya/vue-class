@@ -198,23 +198,32 @@ const toggleAnswer = (q: Question) => {
 }
 
 const back = () => {
-  router.push('/learning')
+  router.push('/adaptive-study')
 }
 </script>
 
 <style scoped>
+/* 将页面整体下移，避免被 App.vue 中 fixed 的顶栏覆盖 */
 .course-page {
-  padding: 16px;
+  padding-top: 80px; /* 根据 App.vue 中 .top-nav 实际高度调整为 72/80/100px 等 */
+  box-sizing: border-box;
+  min-height: calc(100vh - 100px);
   max-width: 1100px;
   margin: 0 auto;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
+/* 返回按钮保持在可见区域 */
 .back {
   margin-bottom: 12px;
   border: 1px solid transparent;
   background: transparent;
   cursor: pointer;
   background-color: #fff;
+  border-color:#64748b;
+  position: relative;
+  z-index: 2;
 }
 
 .card {
