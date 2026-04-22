@@ -55,6 +55,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { getIsLoggedIn } from '../stores/userStore' // 新增
 
 const router = useRouter()
 const showUserMenu = ref(false)
@@ -74,10 +75,22 @@ const goToRegister = () => {
 }
 
 const goToMassiveTeaching = () => {
+  // 点击大规模因材施教时优先检查登录状态
+  if (!getIsLoggedIn()) {
+    // 跳转到登录页并携带重定向信息
+    router.push({ name: 'Login', query: { redirect: '/massive-teaching' } })
+    return
+  }
   router.push('/massive-teaching')
 }
 
 const goToAdaptiveStudy = () => {
+  // 点击自适应学习时优先检查登录状态
+  if (!getIsLoggedIn()) {
+    // 跳转到登录页并携带重定向信息
+    router.push({ name: 'Login', query: { redirect: '/adaptive-study' } })
+    return
+  }
   router.push('/adaptive-study')
 }
 

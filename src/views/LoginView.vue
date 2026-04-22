@@ -31,11 +31,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { UserLogin } from '../services/api'
 import { login } from '../stores/userStore'
 
 const router = useRouter()
+const route = useRoute()
 
 // 表单数据
 const username = ref('')
@@ -48,7 +49,7 @@ const goBack = () => {
     router.push('/')
 }
 
-// 登录处理 - 集成MySQL存储过程
+// 登录处理 - 集成MySQL存储过程（登录成功后优先跳转 route.query.redirect 指定的页面）
 const handleLogin = async () => {
     // 表单验证
     if (!username.value.trim()) {
@@ -67,11 +68,11 @@ const handleLogin = async () => {
         // 调用API服务（调用真实的MySQL存储过程）
         const response = await UserLogin(username.value, password.value)
         
-        if (response.code === 200) {
+        if (response && response.code === 200) {
             // 登录成功 - 根据存储过程返回的数据
             showGlobalMessage(`${response.message}！欢迎回来，${response.username}`, 'success')
             
-            // 保存用户信息到状态管理
+            // 保存用户信息到状态管理（如有）
             if (response.user_id && response.username && response.email) {
                 login({
                     id: response.user_id,
@@ -79,14 +80,20 @@ const handleLogin = async () => {
                     email: response.email
                 })
             }
-            
-            // 延迟1秒后跳转到Workspace页面
+
+            // 登录成功后优先跳转到 redirect（若有），否则回到 workspace
+            const redirect = (route.query.redirect as string) || ''
             setTimeout(() => {
-                router.push('/workspace')
-            }, 1000)
+                if (redirect) {
+                    // 如果是命名路由或完整路径，直接 push
+                    router.push(redirect)
+                } else {
+                    router.push('/workspace')
+                }
+            }, 800)
         } else {
             // 登录失败 - 根据存储过程返回的错误信息
-            showGlobalMessage(response.message, 'error')
+            showGlobalMessage(response?.message || '登录失败', 'error')
         }
     } catch (error) {
         console.error('登录失败:', error)
@@ -101,25 +108,19 @@ const goToRegister = () => {
     router.push('/register')
 }
 
-// 全局消息函数声明
-declare global {
-    interface Window {
-        showGlobalMessage: (text: string, type?: string) => void
-    }
-}
+// 全局消息函数声明（优先使用 window.showGlobalMessage）
+// declare global {
+//     interface Window { showGlobalMessage?: (text: string, type?: string) => void }
+// }
 
 const showGlobalMessage = (text: string, type: string = 'success') => {
-    if (window.showGlobalMessage) {
+    // @ts-ignore
+    if (typeof window.showGlobalMessage === 'function') {
+        // 使用 App.vue 暴露的全局提示
         window.showGlobalMessage(text, type)
     } else {
-        // 备用方案：使用浏览器原生提示
-        if (type === 'success') {
-            alert(`✅ ${text}`)
-        } else if (type === 'error') {
-            alert(`❌ ${text}`)
-        } else {
-            alert(text)
-        }
+        // 回退方案（简易提示）
+        alert(text)
     }
 }
 </script>
@@ -128,7 +129,7 @@ const showGlobalMessage = (text: string, type: string = 'success') => {
 /* 返回按钮 */
 .back-button {
     position: absolute;
-    top: 20px;
+    top: 70px;
     left: 20px;
     z-index: 10;
 }
@@ -161,6 +162,7 @@ const showGlobalMessage = (text: string, type: string = 'success') => {
 
 /* 登录容器 */
 .login-container {
+    /* top: 100px; */
     min-height: 100vh;
     display: flex;
     align-items: center;

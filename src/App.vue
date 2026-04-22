@@ -17,7 +17,7 @@
         <span class="logo" @click="goToHome" style="cursor: pointer">COCO</span>
       </div>
       
-      <!-- 用户按钮和下拉菜单 -->
+      <!-- 用户按钮、登出按钮和下拉菜单 -->
       <div class="user-menu-container">
         <button class="user-btn" @click="toggleUserMenu">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="user-icon">
@@ -29,7 +29,12 @@
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </button>
-        
+
+        <!-- 登出按钮：仅在已登录时显示，位于用户按钮右侧 -->
+        <button v-if="isLoggedIn" class="nav-logout-btn" @click="handleLogout" title="退出登录">
+          退出
+        </button>
+
         <!-- 下拉菜单 -->
         <div v-if="showUserMenu" class="user-dropdown">
           <button class="dropdown-item" @click="gotoLogin">
@@ -59,7 +64,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
-import { initUser } from './stores/userStore'
+import { initUser, getIsLoggedIn, getUser, logout } from './stores/userStore'
 
 // 初始化用户状态
 onMounted(() => {
@@ -108,7 +113,13 @@ window.showGlobalMessage = showGlobalMessage
 
 // --- 从 HomeView 剪切过来的导航交互逻辑 ---
 const router = useRouter()
+
+// 用户菜单控制
 const showUserMenu = ref(false)
+
+// 新增：登录状态与当前用户
+const isLoggedIn = computed(() => getIsLoggedIn())
+const currentUser = computed(() => getUser())
 
 const toggleUserMenu = (e?: Event) => {
   // 阻止事件冒泡（避免立即触发 document click）
@@ -134,6 +145,14 @@ const goToAdaptiveStudy = () => {
   router.push('/adaptive-study')
 }
 
+// 新增：导航栏登出处理（与 WorkspaceView 的登出行为一致）
+const handleLogout = () => {
+  logout()
+  if (window.showGlobalMessage) window.showGlobalMessage('登出成功', 'success')
+  showUserMenu.value = false
+  router.push('/')
+}
+
 // 点击页面其他地方关闭下拉菜单
 const closeUserMenu = (event: MouseEvent) => {
   const target = event.target as HTMLElement | null
@@ -154,12 +173,12 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* 全局消息样式 */
+/* 全局消息样式（调整：放在导航下方并提高 z-index，避免被遮挡） */
 .global-message {
   position: fixed;
-  top: 20px;
+  top: 100px; /* 调整：放在顶部导航下方，避免被遮挡；如需更精确请改为实际 top-nav 高度 */
   right: 20px;
-  z-index: 9999;
+  z-index: 11000; /* 提高到比导航栏更高，确保可见 */
   padding: 12px 20px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -368,6 +387,27 @@ onBeforeUnmount(() => {
 
 .dropdown-item:hover {
   background-color: #f1f1f1;
+}
+
+/* 导航栏右侧登出按钮样式 */
+.nav-logout-btn {
+  margin-left: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-logout-btn:hover {
+  background: #c82333;
+  transform: translateY(-2px);
 }
 
 @keyframes slideDown {

@@ -60,10 +60,7 @@
 
             <!-- 用户信息或登录注册按钮 -->
             <div class="auth-buttons">
-                <div v-if="isLoggedIn" class="user-info">
-                    <!-- <span class="welcome-text">欢迎，{{ currentUser?.username }}</span> -->
-                    <button class="auth-btn logout-btn" @click="handleLogout">登出</button>
-                </div>
+                <!-- 登出按钮已移除 -->
             </div>
         </div>
 
@@ -176,7 +173,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { getIsLoggedIn, getUser, logout } from '../stores/userStore'
+import { getIsLoggedIn, getUser } from '../stores/userStore'
 
 const router = useRouter()
 
@@ -193,22 +190,15 @@ const goToRegister = () => {
     router.push('/register')
 }
 
-// 登出功能
-const handleLogout = () => {
-    logout()
-    showGlobalMessage('登出成功', 'success')
-    router.push('/')
-}
-
 // 当前激活的标签
 const activeTab = ref('center')
 
 // 全局消息函数
-declare global {
-    interface Window {
-        showGlobalMessage: (text: string, type?: string) => void
-    }
-}
+// declare global {
+//     interface Window {
+//         showGlobalMessage: (text: string, type?: string) => void
+//     }
+// }
 
 const showGlobalMessage = (text: string, type: string = 'success') => {
     if (window.showGlobalMessage) {
