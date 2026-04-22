@@ -1,7 +1,5 @@
 <template>
-  <div class="back-button">
-    <button @click="goBack">返回首页</button>
-  </div>
+  <div class="MassiveTeaching">
   <h1 class="teaching-title">AI助力大规模因材施教</h1>
   <h2 class="teaching-subtitle">基于AI的教学辅助系统，为学生量身定制学习路径</h2>
 
@@ -77,14 +75,12 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 const router = useRouter()
-const goBack = () => {
-  router.push('/')
-}
 
 const gotoWorkspace = () => {
   router.push('/Workspace')
@@ -92,6 +88,11 @@ const gotoWorkspace = () => {
 </script>
 
 <style scoped>
+.MassiveTeaching {
+    padding-top: 80px; /* 根据 App.vue 中 top-nav 高度调整（可改为 72px / 80px 等） */
+    box-sizing: border-box;
+    min-height: calc(100vh - 100px);
+}
 /* 主标题 */
 .teaching-title {
   font-size: 60px;
@@ -104,38 +105,6 @@ const gotoWorkspace = () => {
 .teaching-subtitle {
   font-size: 25px;
   text-align: center;
-}
-
-/* 返回首页按钮样式 */
-.back-button {
-  margin-left: 40px;
-  margin-top: 40px;
-}
-
-.back-button button {
-  width: 80px;
-  height: 40px;
-  border-radius: 20px;
-  background-color: hwb(160 10% 25%);
-  color: white;
-  border: none;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.back-button button:hover {
-  background-color: hwb(160 5% 20%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.back-button button:active {
-  transform: translateY(0);
 }
 
 /* 容器：居中并限制最大宽度 */

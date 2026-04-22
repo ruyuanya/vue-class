@@ -1,52 +1,5 @@
 <template>
-  <!-- 顶部导航栏 -->
-  <div class="top-nav">
-    <div class="nav-content">
-      <!-- 左侧占位元素，用于平衡布局 -->
-      <div class="nav-left"></div>
-      <!-- 中间标题部分 -->
-      <div class="nav-center">
-        <h1 class="home-title">个性化学习中心</h1>
-        <p class="home-subtitle">让每一位学习者都能获得最适合自己的教育!</p>
-      </div>
-      
-      <!-- 用户按钮和下拉菜单 -->
-      <div class="user-menu-container">
-        <button class="user-btn" @click="toggleUserMenu">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="user-icon">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-          <span>用户</span>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-icon">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </button>
-        
-        <!-- 下拉菜单 -->
-        <div v-if="showUserMenu" class="user-dropdown">
-          <button class="dropdown-item" @click="gotoLogin">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-icon">
-              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-              <polyline points="10 17 15 12 10 7"></polyline>
-              <line x1="15" y1="12" x2="3" y2="12"></line>
-            </svg>
-            登录
-          </button>
-          <button class="dropdown-item" @click="goToRegister">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-icon">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <polyline points="16 11 18 13 22 9"></polyline>
-            </svg>
-            注册
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 主要内容区域 -->
+  <!-- 主要内容区域（已移除顶部导航） -->
   <div class="main-content">
     <div class="container">
       <div class="card-list">
@@ -73,8 +26,6 @@
         </div>
       </div>
       
-
-
       <div class="card" @click="goToAdaptiveStudy">
         <div class="icon-container">
           <svg t="1774422508451" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -175,19 +126,6 @@ text-align: center;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.home-title {
-  font-size: 28px;
-  font-weight: bold;
-  margin: 0;
-  color: #333;
-}
-
-.home-subtitle {
-  font-size: 16px;
-  margin: 5px 0 0 0;
-  color: #666;
 }
 
 /* 用户菜单容器 */

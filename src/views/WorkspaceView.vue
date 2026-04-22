@@ -218,6 +218,13 @@ const showGlobalMessage = (text: string, type: string = 'success') => {
 </script>
 
 <style scoped>
+/* 将页面整体下移，避免被 fixed 顶部导航覆盖 */
+.workspace-container {
+    padding-top: 80px; /* 根据 App.vue 中 top-nav 高度调整（可改为 72px / 80px 等） */
+    box-sizing: border-box;
+    min-height: calc(100vh - 100px);
+}
+
 /* 导航栏整体样式 */
 
 /* 用户信息样式 */
