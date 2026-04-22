@@ -43,7 +43,7 @@
                       {{ q.showAnswer ? '收起答案' : '显示答案' }}
                     </button>
                     <button
-                      @click="toggleWrong(q)"
+                      @click="toggleWrong(q, t)"
                     >
                       {{ isInWrong(q.id) ? '移除错题本' : '加入错题本' }}
                     </button>
@@ -72,18 +72,24 @@ interface Question {
   answer: string
   showAnswer?: boolean
 }
-
 interface Topic {
   id: string
   title: string
   questions: Question[]
 }
-
 interface Course {
   id: string
   title: string
   desc?: string
   topics: Topic[]
+}
+
+/* 新增：错题项类型，带上课程/章节信息 */
+interface WrongItem extends Question {
+  courseId?: string
+  courseTitle?: string
+  topicId?: string
+  topicTitle?: string
 }
 
 const route = useRoute()
@@ -149,7 +155,7 @@ const course = ref<Course | undefined>(courses.find(c => c.id === id))
 /* 错题本（localStorage 持久化，与 Learning.vue 使用相同 key） */
 const STORAGE_KEY = 'coco_wrong_book'
 
-const loadWrong = (): Question[] => {
+const loadWrong = (): WrongItem[] => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     return raw ? JSON.parse(raw) : []
@@ -158,38 +164,44 @@ const loadWrong = (): Question[] => {
   }
 }
 
-const wrongBook = ref<Question[]>(loadWrong())
+const wrongBook = ref<WrongItem[]>(loadWrong())
 
 const persistWrong = () => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(wrongBook.value))
 }
 
-const isInWrong = (qid: string) => {
-  return wrongBook.value.some(w => w.id === qid)
+/* 修正：按题目 id + courseId 来判断是否已在错题本中，避免不同课程同 id 冲突 */
+const isInWrong = (qid: string, courseId?: string) => {
+  return wrongBook.value.some(w => w.id === qid && w.courseId === courseId)
 }
 
-const addToWrong = (q: Question) => {
+/* 增强：加入错题时同时保存课程与章节信息 */
+const addToWrong = (q: Question, t?: Topic) => {
   wrongBook.value.push({
     id: q.id,
     text: q.text,
-    answer: q.answer
+    answer: q.answer,
+    courseId: course.value?.id,
+    courseTitle: course.value?.title,
+    topicId: t?.id,
+    topicTitle: t?.title
   })
   persistWrong()
   alert('已加入错题本')
 }
 
-const removeFromWrong = (qid: string) => {
-  wrongBook.value = wrongBook.value.filter(w => w.id !== qid)
+const removeFromWrong = (qid: string, courseId?: string) => {
+  wrongBook.value = wrongBook.value.filter(w => !(w.id === qid && w.courseId === courseId))
   persistWrong()
   alert('已从错题本移除')
 }
 
-/* 切换：已存在则移除，否则加入 */
-const toggleWrong = (q: Question) => {
-  if (isInWrong(q.id)) {
-    removeFromWrong(q.id)
+/* 切换：已存在则移除，否则加入；模板中传入 topic */
+const toggleWrong = (q: Question, t?: Topic) => {
+  if (isInWrong(q.id, course.value?.id)) {
+    removeFromWrong(q.id, course.value?.id)
   } else {
-    addToWrong(q)
+    addToWrong(q, t)
   }
 }
 

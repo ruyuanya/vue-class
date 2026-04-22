@@ -52,14 +52,12 @@ const router = useRouter()
 
 const handleClick = (name: string) => {
   if (name === '学习课程') {
-    // 跳到示例课程详情（你可以改成选择具体课程的 id）
     router.push('/learning/course/algebra-basic')
   } else if (name === '学习建议') {
-    // 返回 /learning 并带上 query，页面内可根据 query 显示建议面板
     router.push({ path: '/learning', query: { tab: 'advice' } })
   } else if (name === '错题本') {
-    // 返回 /learning 并带上 query，页面内可根据 query 显示错题本
-    router.push({ path: '/learning', query: { tab: 'wrong' } })
+    // 跳转到新增的错题本页面
+    router.push('/wrong-book')
   } else {
     alert(`「${name}」功能待接入`)
   }

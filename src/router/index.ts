@@ -6,7 +6,8 @@ import WorkspaceView from '../views/WorkspaceView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import CourseDetail from '../views/CourseDetail.vue'
-
+import WrongBook from '../views/WrongBook.vue'
+ 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL || '/'),
   routes: [
@@ -24,6 +25,11 @@ const router = createRouter({
       path: '/adaptive-study',
       name: 'AdaptiveStudy',
       component: AdaptiveStudy,
+    },
+    {
+      path: '/wrong-book',
+      name: 'WrongBook',
+      component: WrongBook,
     },
     {
       path: '/workspace',
@@ -47,5 +53,5 @@ const router = createRouter({
     },
   ],
 })
-
+ 
 export default router
