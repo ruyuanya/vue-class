@@ -155,10 +155,195 @@
                     </div>
                 </div>
             </div>
+            <div v-else-if="activeTab === 'path'" class="learning-path">
+                <!-- 页面标题和描述 -->
+                <div class="path-header">
+                    <h1>个性化学习路径</h1>
+                    <p>根据您的学习目标和进度，为您量身定制的学习路径</p>
+                </div>
 
-            <!-- 其他标签页内容保持不变 -->
-            <div v-else-if="activeTab === 'path'">
-                <div class="content-box">这是学习路径内容</div>
+                <!-- 学习目标设置 -->
+                <div class="goal-section">
+                    <div class="goal-card">
+                        <h3>当前学习目标</h3>
+                        <div class="goal-info">
+                            <div class="goal-item">
+                                <span class="goal-label">主要方向：</span>
+                                <span class="goal-value">全栈Web开发</span>
+                            </div>
+                            <div class="goal-item">
+                                <span class="goal-label">预计完成：</span>
+                                <span class="goal-value">6个月</span>
+                            </div>
+                            <div class="goal-item">
+                                <span class="goal-label">当前进度：</span>
+                                <span class="goal-value">25%</span>
+                            </div>
+                        </div>
+                        <button class="edit-goal-btn">修改目标</button>
+                    </div>
+                </div>
+
+                <!-- 学习路径时间线 -->
+                <div class="timeline-section">
+                    <h2>学习路径时间线</h2>
+                    <div class="timeline">
+                        <!-- 阶段1：基础阶段 -->
+                        <div class="timeline-item completed">
+                            <div class="timeline-marker">
+                                <div class="marker-icon">✓</div>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>阶段一：前端基础</h4>
+                                    <span class="timeline-status completed">已完成</span>
+                                </div>
+                                <div class="timeline-body">
+                                    <div class="skill-list">
+                                        <span class="skill-tag completed">HTML/CSS</span>
+                                        <span class="skill-tag completed">JavaScript基础</span>
+                                        <span class="skill-tag completed">响应式设计</span>
+                                    </div>
+                                    <p class="timeline-desc">掌握网页开发基础，构建静态页面</p>
+                                    <div class="timeline-progress">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 100%"></div>
+                                        </div>
+                                        <span class="progress-text">100%完成</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 阶段2：Vue.js开发 -->
+                        <div class="timeline-item current">
+                            <div class="timeline-marker">
+                                <div class="marker-icon">⚡</div>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>阶段二：Vue.js框架</h4>
+                                    <span class="timeline-status current">进行中</span>
+                                </div>
+                                <div class="timeline-body">
+                                    <div class="skill-list">
+                                        <span class="skill-tag completed">Vue基础</span>
+                                        <span class="skill-tag current">Vue Router</span>
+                                        <span class="skill-tag pending">Vuex/Pinia</span>
+                                        <span class="skill-tag pending">组件开发</span>
+                                    </div>
+                                    <p class="timeline-desc">学习现代前端框架，构建单页应用</p>
+                                    <div class="timeline-progress">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 65%"></div>
+                                        </div>
+                                        <span class="progress-text">65%完成</span>
+                                    </div>
+                                    <div class="action-buttons">
+                                        <button class="continue-btn">继续学习</button>
+                                        <button class="review-btn">复习</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 阶段3：后端开发 -->
+                        <div class="timeline-item pending">
+                            <div class="timeline-marker">
+                                <div class="marker-icon">🔜</div>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>阶段三：Node.js后端</h4>
+                                    <span class="timeline-status pending">待开始</span>
+                                </div>
+                                <div class="timeline-body">
+                                    <div class="skill-list">
+                                        <span class="skill-tag pending">Node.js基础</span>
+                                        <span class="skill-tag pending">Express框架</span>
+                                        <span class="skill-tag pending">数据库设计</span>
+                                        <span class="skill-tag pending">API开发</span>
+                                    </div>
+                                    <p class="timeline-desc">掌握服务器端开发，构建完整应用</p>
+                                    <div class="timeline-estimate">
+                                        <span>预计开始：2周后</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 阶段4：全栈项目 -->
+                        <div class="timeline-item pending">
+                            <div class="timeline-marker">
+                                <div class="marker-icon">🎯</div>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>阶段四：全栈项目</h4>
+                                    <span class="timeline-status pending">待开始</span>
+                                </div>
+                                <div class="timeline-body">
+                                    <div class="skill-list">
+                                        <span class="skill-tag pending">项目架构</span>
+                                        <span class="skill-tag pending">部署上线</span>
+                                        <span class="skill-tag pending">性能优化</span>
+                                    </div>
+                                    <p class="timeline-desc">综合运用所学知识，完成真实项目</p>
+                                    <div class="timeline-estimate">
+                                        <span>预计开始：3个月后</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 推荐学习资源 -->
+                <div class="resources-section">
+                    <h2>推荐学习资源</h2>
+                    <div class="resources-grid">
+                        <div class="resource-card">
+                            <div class="resource-icon">📖</div>
+                            <div class="resource-info">
+                                <h4>Vue官方文档</h4>
+                                <p>最权威的Vue.js学习资料</p>
+                                <a href="#" class="resource-link">查看文档</a>
+                            </div>
+                        </div>
+                        <div class="resource-card">
+                            <div class="resource-icon">🎥</div>
+                            <div class="resource-info">
+                                <h4>实战视频课程</h4>
+                                <p>从零开始构建Vue应用</p>
+                                <a href="#" class="resource-link">开始学习</a>
+                            </div>
+                        </div>
+                        <div class="resource-card">
+                            <div class="resource-icon">💻</div>
+                            <div class="resource-info">
+                                <h4>练习项目</h4>
+                                <p>Todo应用开发实战</p>
+                                <a href="#" class="resource-link">开始挑战</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 学习建议 -->
+                <div class="suggestion-section">
+                    <div class="suggestion-card">
+                        <h3>AI学习建议</h3>
+                        <div class="suggestion-content">
+                            <p>根据您的学习进度，建议您：</p>
+                            <ul>
+                                <li>每天花1-2小时学习Vue Router相关概念</li>
+                                <li>完成至少3个路由相关的练习项目</li>
+                                <li>阅读官方文档中的路由守卫部分</li>
+                                <li>尝试构建一个多页面的个人博客应用</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div v-else-if="activeTab === 'map'">
                 <div class="content-box">这是知识图谱内容</div>
@@ -646,5 +831,386 @@ const showGlobalMessage = (text: string, type: string = 'success') => {
     font-size: 18px;
     color: #333;
     text-align: center;
+}
+
+/* 学习路径样式 */
+.learning-path {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.path-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.path-header h1 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.path-header p {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+}
+
+/* 目标设置 */
+.goal-section {
+    margin-bottom: 40px;
+}
+
+.goal-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.goal-card h3 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.goal-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.goal-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.goal-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 5px;
+}
+
+.goal-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.edit-goal-btn {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.edit-goal-btn:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+/* 时间线样式 */
+.timeline-section {
+    margin-bottom: 40px;
+}
+
+.timeline-section h2 {
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e0e0e0;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -40px;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.timeline-item.completed .timeline-marker {
+    background: #27ae60;
+    color: white;
+}
+
+.timeline-item.current .timeline-marker {
+    background: #3498db;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.timeline-item.pending .timeline-marker {
+    background: #bdc3c7;
+    color: white;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.timeline-content {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    border-left: 4px solid;
+}
+
+.timeline-item.completed .timeline-content {
+    border-left-color: #27ae60;
+}
+
+.timeline-item.current .timeline-content {
+    border-left-color: #3498db;
+}
+
+.timeline-item.pending .timeline-content {
+    border-left-color: #bdc3c7;
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.timeline-header h4 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.timeline-status {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.timeline-status.completed {
+    background: #d5f4e6;
+    color: #27ae60;
+}
+
+.timeline-status.current {
+    background: #d6eaf8;
+    color: #3498db;
+}
+
+.timeline-status.pending {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+
+.skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.skill-tag {
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.skill-tag.completed {
+    background: #d5f4e6;
+    color: #27ae60;
+}
+
+.skill-tag.current {
+    background: #d6eaf8;
+    color: #3498db;
+}
+
+.skill-tag.pending {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+
+.timeline-desc {
+    color: #7f8c8d;
+    margin-bottom: 15px;
+}
+
+.timeline-progress {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 8px;
+    background: #ecf0f1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3498db, #2980b9);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    min-width: 80px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.continue-btn, .review-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.continue-btn {
+    background: #3498db;
+    color: white;
+}
+
+.continue-btn:hover {
+    background: #2980b9;
+}
+
+.review-btn {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+
+.review-btn:hover {
+    background: #bdc3c7;
+}
+
+.timeline-estimate {
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+/* 资源推荐 */
+.resources-section {
+    margin-bottom: 40px;
+}
+
+.resources-section h2 {
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.resource-card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s ease;
+}
+
+.resource-card:hover {
+    transform: translateY(-5px);
+}
+
+.resource-icon {
+    font-size: 2rem;
+}
+
+.resource-info h4 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+}
+
+.resource-info p {
+    margin: 0 0 15px 0;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+.resource-link {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.resource-link:hover {
+    color: #2980b9;
+}
+
+/* 学习建议 */
+.suggestion-card {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.suggestion-card h3 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.suggestion-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.suggestion-content li {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.suggestion-content li:last-child {
+    border-bottom: none;
 }
 </style>
