@@ -119,3 +119,64 @@ export const healthCheck = async (): Promise<{ status: string; message: string }
     }
   }
 }
+
+// 添加课程
+export const addClass = async (className: string, teacher: string, classroom: string, startTime: string): Promise<{ code: number; message: string; classId?: number }> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/addCourse`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ class_name: className, teacher, classroom, start_time: startTime })
+    })
+    
+    const data = await response.json()
+    
+    if (!response.ok) {
+      return {
+        code: response.status,
+        message: data.message || '添加课程失败'
+      }
+    }
+    
+    // 处理后端返回的二维数组格式
+    let classId = null
+    if (data.success && data.data && Array.isArray(data.data) && data.data.length > 0 && data.data[0].length > 0) {
+      classId = data.data[0][0].new_id
+    }
+    
+    return {
+      code: 200,
+      message: '添加课程成功',
+      classId
+    }
+  } catch (error) {
+    console.error('添加课程请求失败:', error)
+    return {
+      code: 500,
+      message: '网络连接失败，请检查后端服务是否启动'
+    }
+  }
+}
+
+// 获取课程列表
+export const getCourses = async (): Promise<Array<{ id: number; class_name: string; teacher: string; classroom: string; start_time: string }>> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/getCourse`)
+    
+    if (!response.ok) {
+      throw new Error('获取课程列表失败')
+    }
+    
+    const data = await response.json()
+    // 处理后端返回的二维数组格式
+    if (data.success && data.data && Array.isArray(data.data) && data.data.length > 0) {
+      return data.data[0] || []
+    }
+    return []
+  } catch (error) {
+    console.error('获取课程列表失败:', error)
+    return []
+  }
+}
