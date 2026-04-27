@@ -47,5 +47,11 @@ export const getUser = () => user.value
 export const getIsLoggedIn = () => isLoggedIn.value
 export const getToken = () => token.value
 
+// 检查用户是否有权限访问课程管理页面
+export const hasCourseManagerAccess = () => {
+  const currentUser = user.value
+  return currentUser && (currentUser.username === 'testuser' || currentUser.username === 'admin')
+}
+
 // 导出响应式状态
 export { user, isLoggedIn, token }

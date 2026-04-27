@@ -53,6 +53,14 @@
             </svg>
             注册
           </button>
+          <!-- 课程管理选项，只有特定用户可见 -->
+          <button v-if="hasCourseAccess" class="dropdown-item" @click="goToCourseManager">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-icon">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            课程管理
+          </button>
         </div>
       </div>
     </div>
@@ -64,7 +72,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
-import { initUser, getIsLoggedIn, getUser, logout } from './stores/userStore'
+import { initUser, getIsLoggedIn, getUser, logout, hasCourseManagerAccess } from './stores/userStore'
 
 // 初始化用户状态
 onMounted(() => {
@@ -120,6 +128,7 @@ const showUserMenu = ref(false)
 // 新增：登录状态与当前用户
 const isLoggedIn = computed(() => getIsLoggedIn())
 const currentUser = computed(() => getUser())
+const hasCourseAccess = computed(() => hasCourseManagerAccess())
 
 const toggleUserMenu = (e?: Event) => {
   // 阻止事件冒泡（避免立即触发 document click）
@@ -143,6 +152,11 @@ const goToMassiveTeaching = () => {
 
 const goToAdaptiveStudy = () => {
   router.push('/adaptive-study')
+}
+
+const goToCourseManager = () => {
+  showUserMenu.value = false
+  router.push('/coursemanager')
 }
 
 // 新增：导航栏登出处理（与 WorkspaceView 的登出行为一致）
