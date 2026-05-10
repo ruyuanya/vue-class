@@ -61,17 +61,50 @@ export const UserRegister = async (username: string, password: string, email?: s
       body: JSON.stringify({ username, password, email })
     })
     
+    // 检查HTTP状态码
+    if (!response.ok) {
+      try {
+        const data = await response.json()
+        return {
+          code: response.status,
+          message: data.message || data.error || `服务器错误 ${response.status}`
+        }
+      } catch (parseError) {
+        // 如果无法解析JSON响应
+        return {
+          code: response.status,
+          message: `服务器返回错误状态码: ${response.status}`
+        }
+      }
+    }
+    
+    // 解析成功响应
     const data = await response.json()
     
-    if (!response.ok) {
-      // 处理HTTP错误状态
+    // 检查后端返回的数据格式
+    if (data.success === false) {
       return {
-        code: response.status,
+        code: data.code || 500,
         message: data.message || '注册失败'
       }
     }
     
-    return data
+    // 处理后端返回的二维数组格式（存储过程返回）
+    if (data.data && Array.isArray(data.data) && data.data.length > 0) {
+      const result = data.data[0][0]
+      return {
+        code: result.code || 200,
+        message: result.message || '注册成功',
+        user_id: result.user_id
+      }
+    }
+    
+    // 如果没有data字段，直接返回
+    return {
+      code: data.code || 200,
+      message: data.message || '注册成功',
+      user_id: data.user_id
+    }
   } catch (error) {
     console.error('注册请求失败:', error)
     return {

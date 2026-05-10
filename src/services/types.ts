@@ -17,3 +17,9 @@ export interface LoginRequest {
   username: string
   password: string
 }
+
+export interface RegisterResponse {
+  code: number
+  message: string
+  user_id?: number
+}
