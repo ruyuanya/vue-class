@@ -15,6 +15,10 @@
       <!-- 中间标题部分（绝对居中） -->
       <div class="nav-center">
         <span class="logo" @click="goToHome" style="cursor: pointer">COCO</span>
+        <!-- 欢迎信息：仅在登录时显示 -->
+        <span v-if="isLoggedIn && currentUser" class="welcome-text">
+          欢迎, {{ currentUser.username }}
+        </span>
       </div>
       
       <!-- 用户按钮、登出按钮和下拉菜单 -->
@@ -24,7 +28,8 @@
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
-          <span>用户</span>
+          <!-- 显示用户名或默认文本 -->
+          <span>{{ isLoggedIn && currentUser ? currentUser.username : '用户' }}</span>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-icon">
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
@@ -37,30 +42,43 @@
 
         <!-- 下拉菜单 -->
         <div v-if="showUserMenu" class="user-dropdown">
-          <button class="dropdown-item" @click="gotoLogin">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-icon">
-              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-              <polyline points="10 17 15 12 10 7"></polyline>
-              <line x1="15" y1="12" x2="3" y2="12"></line>
-            </svg>
-            登录
-          </button>
-          <button class="dropdown-item" @click="goToRegister">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-icon">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <polyline points="16 11 18 13 22 9"></polyline>
-            </svg>
-            注册
-          </button>
-          <!-- 课程管理选项，只有特定用户可见 -->
-          <button v-if="hasCourseAccess" class="dropdown-item" @click="goToCourseManager">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-icon">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-            课程管理
-          </button>
+          <!-- 未登录时显示登录/注册 -->
+          <template v-if="!isLoggedIn">
+            <button class="dropdown-item" @click="gotoLogin">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-icon">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                <polyline points="10 17 15 12 10 7"></polyline>
+                <line x1="15" y1="12" x2="3" y2="12"></line>
+              </svg>
+              登录
+            </button>
+            <button class="dropdown-item" @click="goToRegister">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-icon">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <polyline points="16 11 18 13 22 9"></polyline>
+              </svg>
+              注册
+            </button>
+          </template>
+          
+          <!-- 已登录时显示用户信息和操作 -->
+          <template v-else>
+            <!-- 用户信息 -->
+            <div class="dropdown-user-info">
+              <div class="dropdown-user-name">{{ currentUser?.username }}</div>
+              <div class="dropdown-user-email">{{ currentUser?.email }}</div>
+            </div>
+            <hr class="dropdown-divider">
+            <!-- 课程管理选项，只有特定用户可见 -->
+            <button v-if="hasCourseAccess" class="dropdown-item" @click="goToCourseManager">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-icon">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              课程管理
+            </button>
+          </template>
         </div>
       </div>
     </div>
@@ -74,10 +92,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { initUser, getIsLoggedIn, getUser, logout, hasCourseManagerAccess } from './stores/userStore'
 
-// 初始化用户状态
-onMounted(() => {
-  initUser()
-})
+// 初始化用户状态（在组件挂载时恢复用户登录状态）
 
 // 消息状态
 const showMessage = ref(false)
@@ -178,6 +193,9 @@ const closeUserMenu = (event: MouseEvent) => {
 
 // 添加 / 移除全局点击事件监听
 onMounted(() => {
+  // 初始化用户状态（从localStorage恢复）
+  initUser()
+  // 添加全局点击事件监听
   document.addEventListener('click', closeUserMenu)
 })
 
@@ -331,6 +349,20 @@ onBeforeUnmount(() => {
   margin: 4px 0 0;
 }
 
+.welcome-text {
+  font-size: 14px;
+  color: #666;
+  margin-left: 16px;
+  font-weight: 400;
+}
+
+.welcome-text {
+  font-size: 14px;
+  color: #666;
+  margin-left: 16px;
+  font-weight: 400;
+}
+
 /* 右侧用户菜单，占位宽度与左侧一致，使用 flex 对齐按钮 */
 .user-menu-container {
   flex: 0 0 220px;
@@ -375,15 +407,17 @@ onBeforeUnmount(() => {
 
 .user-dropdown {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 4px);
   right: 0;
   background-color: #fff;
   border: 1px solid #eaeaea;
   border-radius: 4px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 10001;
-  min-width: 160px;
+  min-width: 180px;
+  max-width: 200px;
   animation: fadeIn 0.3s ease;
+  transform-origin: top right;
 }
 
 .dropdown-item {
@@ -401,6 +435,32 @@ onBeforeUnmount(() => {
 
 .dropdown-item:hover {
   background-color: #f1f1f1;
+}
+
+/* 下拉菜单分隔线 */
+.dropdown-divider {
+  border: none;
+  border-top: 1px solid #eaeaea;
+  margin: 4px 0;
+}
+
+/* 下拉菜单用户信息 */
+.dropdown-user-info {
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.dropdown-user-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.dropdown-user-email {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
 }
 
 /* 导航栏右侧登出按钮样式 */
