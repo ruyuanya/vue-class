@@ -340,6 +340,147 @@
                 </div>
             </div>
             
+            <!-- 知识图谱内容 -->
+            <div v-else-if="activeTab === 'map'" class="knowledge-map">
+                <!-- 头部区域 -->
+                <div class="map-header">
+                    <div class="header-title">
+                        <h1>知识图谱</h1>
+                        <p>探索知识节点间的关联关系</p>
+                    </div>
+                    <div class="header-actions">
+                        <div class="search-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <input type="text" v-model="searchKeyword" placeholder="搜索知识节点..." class="search-input" />
+                        </div>
+                        <div class="filter-tabs">
+                            <button 
+                                v-for="filter in knowledgeFilters" 
+                                :key="filter.value"
+                                :class="['filter-tab', { active: activeKnowledgeFilter === filter.value }]"
+                                @click="activeKnowledgeFilter = filter.value"
+                            >
+                                {{ filter.label }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 图谱展示区域 -->
+                <div class="map-container">
+                    <!-- 左侧图例 -->
+                    <div class="legend-panel">
+                        <h3>知识分类</h3>
+                        <div class="legend-items">
+                            <div v-for="category in knowledgeCategories" :key="category.id" class="legend-item">
+                                <div class="legend-dot" :style="{ backgroundColor: category.color }"></div>
+                                <span>{{ category.name }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 中间图谱画布 -->
+                    <div class="graph-canvas">
+                        <svg class="graph-svg" viewBox="0 0 800 500">
+                            <!-- 连接线 -->
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#999" />
+                                </marker>
+                            </defs>
+                            
+                            <!-- 关系连线 -->
+                            <line 
+                                v-for="(relation, index) in knowledgeRelations" 
+                                :key="'line-' + index"
+                                :x1="relation.from.x" :y1="relation.from.y"
+                                :x2="relation.to.x" :y2="relation.to.y"
+                                stroke="#ccc" stroke-width="2" marker-end="url(#arrowhead)"
+                            />
+                            
+                            <!-- 知识节点 -->
+                            <g 
+                                v-for="node in filteredNodes" 
+                                :key="node.id"
+                                class="node-group"
+                                :class="{ selected: selectedNodeId === node.id }"
+                                @click="selectNode(node)"
+                            >
+                                <circle 
+                                    :cx="node.x" :cy="node.y" 
+                                    :r="node.size"
+                                    :fill="getNodeColor(node.category)"
+                                    class="node-circle"
+                                />
+                                <text 
+                                    :x="node.x" :y="node.y + 5"
+                                    text-anchor="middle"
+                                    class="node-label"
+                                >{{ node.label }}</text>
+                            </g>
+                        </svg>
+
+                        <!-- 空状态提示 -->
+                        <div v-if="filteredNodes.length === 0" class="empty-state">
+                            <div class="empty-icon">🔍</div>
+                            <p>未找到匹配的知识节点</p>
+                        </div>
+                    </div>
+
+                    <!-- 右侧详情面板 -->
+                    <div class="detail-panel">
+                        <h3>节点详情</h3>
+                        <div v-if="selectedNode" class="node-detail">
+                            <div class="detail-header">
+                                <div class="detail-icon" :style="{ backgroundColor: getNodeColor(selectedNode.category) }"></div>
+                                <div class="detail-title">
+                                    <h4>{{ selectedNode.label }}</h4>
+                                    <span class="detail-category">{{ getCategoryName(selectedNode.category) }}</span>
+                                </div>
+                            </div>
+                            <div class="detail-body">
+                                <p>{{ selectedNode.description }}</p>
+                                <div class="detail-metrics">
+                                    <div class="metric-item">
+                                        <span class="metric-label">关联节点</span>
+                                        <span class="metric-value">{{ selectedNode.relations }}</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-label">掌握程度</span>
+                                        <span class="metric-value">{{ selectedNode.mastery }}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="learn-btn">开始学习</button>
+                        </div>
+                        <div v-else class="no-selection">
+                            <div class="no-selection-icon">👆</div>
+                            <p>点击图谱中的节点查看详情</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 底部推荐学习路径 -->
+                <div class="recommended-path">
+                    <h3>推荐学习路径</h3>
+                    <div class="path-items">
+                        <div v-for="(step, index) in recommendedPath" :key="index" class="path-item">
+                            <div class="step-number">{{ index + 1 }}</div>
+                            <div class="step-content">
+                                <h4>{{ step.title }}</h4>
+                                <p>{{ step.description }}</p>
+                            </div>
+                            <div class="step-status" :class="step.status">
+                                {{ step.status === 'completed' ? '✓' : step.status === 'current' ? '⚡' : '🔜' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- AI导师内容 -->
             <div v-else-if="activeTab === 'ai'" class="ai-tutor">
                 <div class="tutor-header">
@@ -515,6 +656,105 @@ const activeTab = ref('center')
 // 知识图谱相关数据
 const activeFilter = ref('全部')
 const selectedNode = ref(null)
+const selectedNodeId = ref(null)
+const searchKeyword = ref('')
+const activeKnowledgeFilter = ref('all')
+
+// 知识分类
+const knowledgeCategories = [
+    { id: 'frontend', name: '前端开发', color: '#3498db' },
+    { id: 'backend', name: '后端开发', color: '#e74c3c' },
+    { id: 'database', name: '数据库', color: '#f39c12' },
+    { id: 'framework', name: '框架', color: '#9b59b6' },
+    { id: 'tool', name: '开发工具', color: '#1abc9c' }
+]
+
+// 筛选选项
+const knowledgeFilters = [
+    { label: '全部', value: 'all' },
+    { label: '前端', value: 'frontend' },
+    { label: '后端', value: 'backend' },
+    { label: '数据库', value: 'database' }
+]
+
+// 知识节点数据
+const knowledgeNodes = ref([
+    { id: 'vue', label: 'Vue.js', x: 400, y: 80, size: 35, category: 'framework', description: '渐进式JavaScript框架，用于构建用户界面', relations: 8, mastery: 85 },
+    { id: 'react', label: 'React', x: 200, y: 120, size: 30, category: 'framework', description: 'Facebook开发的用户界面库', relations: 7, mastery: 60 },
+    { id: 'angular', label: 'Angular', x: 600, y: 120, size: 28, category: 'framework', description: 'Google开发的前端框架', relations: 6, mastery: 40 },
+    { id: 'javascript', label: 'JavaScript', x: 400, y: 200, size: 40, category: 'frontend', description: 'Web开发的核心编程语言', relations: 12, mastery: 90 },
+    { id: 'typescript', label: 'TypeScript', x: 250, y: 280, size: 32, category: 'frontend', description: 'JavaScript的超集，添加静态类型', relations: 5, mastery: 70 },
+    { id: 'nodejs', label: 'Node.js', x: 550, y: 280, size: 34, category: 'backend', description: '基于Chrome V8引擎的JavaScript运行时', relations: 9, mastery: 65 },
+    { id: 'python', label: 'Python', x: 320, y: 380, size: 36, category: 'backend', description: '简洁优雅的编程语言', relations: 8, mastery: 55 },
+    { id: 'mysql', label: 'MySQL', x: 480, y: 380, size: 30, category: 'database', description: '开源关系型数据库管理系统', relations: 6, mastery: 75 },
+    { id: 'mongodb', label: 'MongoDB', x: 650, y: 350, size: 28, category: 'database', description: 'NoSQL文档数据库', relations: 4, mastery: 50 },
+    { id: 'webpack', label: 'Webpack', x: 150, y: 300, size: 26, category: 'tool', description: '现代JavaScript应用的模块打包工具', relations: 3, mastery: 80 },
+    { id: 'git', label: 'Git', x: 120, y: 200, size: 28, category: 'tool', description: '分布式版本控制系统', relations: 4, mastery: 85 },
+    { id: 'docker', label: 'Docker', x: 680, y: 220, size: 26, category: 'tool', description: '容器化平台', relations: 3, mastery: 45 }
+])
+
+// 关系连线数据
+const knowledgeRelations = [
+    { from: { x: 400, y: 80 }, to: { x: 400, y: 200 } },
+    { from: { x: 200, y: 120 }, to: { x: 400, y: 200 } },
+    { from: { x: 600, y: 120 }, to: { x: 400, y: 200 } },
+    { from: { x: 400, y: 200 }, to: { x: 250, y: 280 } },
+    { from: { x: 400, y: 200 }, to: { x: 550, y: 280 } },
+    { from: { x: 250, y: 280 }, to: { x: 320, y: 380 } },
+    { from: { x: 550, y: 280 }, to: { x: 480, y: 380 } },
+    { from: { x: 550, y: 280 }, to: { x: 650, y: 350 } },
+    { from: { x: 150, y: 300 }, to: { x: 250, y: 280 } },
+    { from: { x: 120, y: 200 }, to: { x: 200, y: 120 } },
+    { from: { x: 680, y: 220 }, to: { x: 650, y: 350 } }
+]
+
+// 推荐学习路径
+const recommendedPath = [
+    { title: 'JavaScript基础', description: '掌握JavaScript核心语法和ES6+特性', status: 'completed' },
+    { title: 'Vue.js框架', description: '学习Vue 3组合式API和响应式原理', status: 'current' },
+    { title: 'TypeScript进阶', description: '掌握类型系统和高级特性', status: 'pending' },
+    { title: 'Node.js后端', description: '学习服务器端开发', status: 'pending' },
+    { title: '项目实战', description: '完成全栈项目开发', status: 'pending' }
+]
+
+// 筛选后的节点
+const filteredNodes = computed(() => {
+    let nodes = knowledgeNodes.value
+    
+    // 按关键词筛选
+    if (searchKeyword.value) {
+        const keyword = searchKeyword.value.toLowerCase()
+        nodes = nodes.filter(node => 
+            node.label.toLowerCase().includes(keyword) ||
+            node.description.toLowerCase().includes(keyword)
+        )
+    }
+    
+    // 按分类筛选
+    if (activeKnowledgeFilter.value !== 'all') {
+        nodes = nodes.filter(node => node.category === activeKnowledgeFilter.value)
+    }
+    
+    return nodes
+})
+
+// 获取节点颜色
+const getNodeColor = (categoryId) => {
+    const category = knowledgeCategories.find(c => c.id === categoryId)
+    return category ? category.color : '#999'
+}
+
+// 获取分类名称
+const getCategoryName = (categoryId) => {
+    const category = knowledgeCategories.find(c => c.id === categoryId)
+    return category ? category.name : '未分类'
+}
+
+// 选择节点
+const selectNode = (node) => {
+    selectedNode.value = node
+    selectedNodeId.value = node.id
+}
 
 // 筛选选项
 const filters = ['全部', '基础', '框架', '工具', '进阶']
@@ -1580,6 +1820,377 @@ const showGlobalMessage = (text: string, type: string = 'success') => {
     background: #667eea;
     color: white;
     border-top-right-radius: 0;
+}
+
+/* 知识图谱样式 */
+.knowledge-map {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    padding: 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    color: white;
+}
+
+.header-title h1 {
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.header-title p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.header-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.2);
+    border-radius: 25px;
+    padding: 8px 15px;
+    gap: 10px;
+}
+
+.search-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.8;
+}
+
+.search-input {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 14px;
+    outline: none;
+    width: 200px;
+}
+
+.search-input::placeholder {
+    color: rgba(255,255,255,0.7);
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 8px;
+}
+
+.filter-tab {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-tab:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+.filter-tab.active {
+    background: white;
+    color: #667eea;
+}
+
+.map-container {
+    display: grid;
+    grid-template-columns: 200px 1fr 300px;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.legend-panel {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.legend-panel h3 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-size: 1.2rem;
+}
+
+.legend-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.legend-item span {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.graph-canvas {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.graph-svg {
+    width: 100%;
+    height: 500px;
+}
+
+.node-group {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.node-group:hover {
+    transform: scale(1.1);
+}
+
+.node-group.selected .node-circle {
+    stroke: #667eea;
+    stroke-width: 3;
+}
+
+.node-circle {
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
+}
+
+.node-circle:hover {
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+}
+
+.node-label {
+    font-size: 12px;
+    fill: #333;
+    font-weight: 500;
+    pointer-events: none;
+}
+
+.empty-state {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.empty-state p {
+    color: #999;
+    font-size: 1rem;
+}
+
+.detail-panel {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.detail-panel h3 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-size: 1.2rem;
+}
+
+.node-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.detail-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.detail-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+}
+
+.detail-title h4 {
+    margin: 0 0 5px 0;
+    color: #2c3e50;
+    font-size: 1.3rem;
+}
+
+.detail-category {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+}
+
+.detail-body p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.detail-metrics {
+    display: flex;
+    gap: 20px;
+}
+
+.metric-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.metric-label {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+}
+
+.metric-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.learn-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.learn-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.no-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.no-selection-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.no-selection p {
+    color: #999;
+    font-size: 0.95rem;
+}
+
+.recommended-path {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.recommended-path h3 {
+    margin-bottom: 25px;
+    color: #2c3e50;
+    font-size: 1.4rem;
+}
+
+.path-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.path-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border-left: 4px solid;
+    transition: all 0.3s ease;
+}
+
+.path-item:hover {
+    background: #f1f3f4;
+    transform: translateX(5px);
+}
+
+.path-item:nth-child(1) { border-left-color: #27ae60; }
+.path-item:nth-child(2) { border-left-color: #3498db; }
+.path-item:nth-child(3) { border-left-color: #f39c12; }
+.path-item:nth-child(4) { border-left-color: #9b59b6; }
+.path-item:nth-child(5) { border-left-color: #bdc3c7; }
+
+.step-number {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #667eea;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.step-content h4 {
+    margin: 0 0 5px 0;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.step-content p {
+    margin: 0;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+.step-status {
+    font-size: 1.5rem;
+    margin-left: auto;
 }
 
 .message-time {
