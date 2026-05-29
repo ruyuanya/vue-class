@@ -13,6 +13,12 @@
     <div v-else>
       <!-- 页面标题 -->
       <div class="page-header">
+        <button class="back-btn" @click="goBack">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="back-icon">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          返回
+        </button>
         <h1>课程管理</h1>
       </div>
       
@@ -97,9 +103,9 @@ const courseForm = ref({
 // 课程列表
 const courses = ref<Array<{ id: number; class_name: string; teacher: string; classroom: string; start_time: string }>>([])
 
-// 返回首页
+// 返回Workspace
 const goBack = () => {
-  router.push('/')
+  router.push('/workspace')
 }
 
 // 加载课程列表
@@ -213,7 +219,7 @@ onMounted(() => {
   margin-bottom: 32px;
 }
 
-.back-btn {
+.access-denied-content .back-btn {
   background-color: #1ba766;
   color: #fff;
   border: none;
@@ -225,13 +231,14 @@ onMounted(() => {
   transition: background-color 0.3s ease;
 }
 
-.back-btn:hover {
+.access-denied-content .back-btn:hover {
   background-color: #168f58;
 }
 
 .page-header {
   margin-bottom: 40px;
   text-align: center;
+  position: relative;
 }
 
 .page-header h1 {
@@ -239,6 +246,35 @@ onMounted(() => {
   font-weight: 600;
   color: #333;
   margin: 0;
+}
+
+/* 返回按钮 */
+.back-btn {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #1ba766;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: #168f58;
+}
+
+.back-icon {
+  width: 16px;
+  height: 16px;
 }
 
 .course-form {
