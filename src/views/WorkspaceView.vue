@@ -47,15 +47,6 @@
                     </svg>
                     <span>知识图谱</span>
                 </button>
-                <button class="nav-btn" :class="{ active: activeTab === 'ai' }" @click="activeTab = 'ai'">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-svg">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                        <path d="M12 17h.01"></path>
-                    </svg>
-                    <span>AI导师</span>
-                </button>
             </div>
 
             <!-- 用户信息或登录注册按钮 -->
@@ -481,157 +472,12 @@
                 </div>
             </div>
 
-            <!-- AI导师内容 -->
-            <div v-else-if="activeTab === 'ai'" class="ai-tutor">
-                <div class="tutor-header">
-                    <div class="tutor-avatar">
-                        <div class="avatar-icon">🤖</div>
-                    </div>
-                    <div class="tutor-info">
-                        <h1>AI学习导师</h1>
-                        <p>随时为您解答问题，提供个性化学习建议</p>
-                    </div>
-                    <div class="tutor-status">
-                        <span class="status-indicator online">在线</span>
-                    </div>
-                </div>
-
-                <div class="tutor-container">
-                    <!-- 对话区域 -->
-                    <div class="chat-area">
-                        <div class="chat-messages" ref="chatMessages">
-                            <div class="message ai-message">
-                                <div class="message-avatar">🤖</div>
-                                <div class="message-content">
-                                    <div class="message-text">
-                                        您好！我是您的AI学习导师。我可以帮您：
-                                        <ul>
-                                            <li>解答编程问题</li>
-                                            <li>提供学习建议</li>
-                                            <li>推荐学习资源</li>
-                                            <li>制定学习计划</li>
-                                        </ul>
-                                        请告诉我您需要什么帮助？
-                                    </div>
-                                    <div class="message-time">刚刚</div>
-                                </div>
-                            </div>
-
-                            <div v-for="(message, index) in chatMessages" :key="index" 
-                                 :class="['message', message.type + '-message']">
-                                <div class="message-avatar">
-                                    {{ message.type === 'user' ? '👤' : '🤖' }}
-                                </div>
-                                <div class="message-content">
-                                    <div class="message-text">{{ message.text }}</div>
-                                    <div class="message-time">{{ message.time }}</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 输入区域 -->
-                        <div class="chat-input-area">
-                            <div class="quick-questions">
-                                <span class="quick-label">快速提问：</span>
-                                <button 
-                                    v-for="question in quickQuestions" 
-                                    :key="question"
-                                    @click="askQuestion(question)"
-                                    class="quick-btn"
-                                >
-                                    {{ question }}
-                                </button>
-                            </div>
-                            <div class="input-container">
-                                <textarea 
-                                    v-model="userInput"
-                                    placeholder="请输入您的问题..."
-                                    @keydown.enter.prevent="sendMessage"
-                                    class="message-input"
-                                    rows="3"
-                                ></textarea>
-                                <button @click="sendMessage" class="send-btn">
-                                    <span>发送</span>
-                                    <span class="send-icon">📤</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 侧边功能区域 -->
-                    <div class="sidebar">
-                        <!-- 学习建议 -->
-                        <div class="suggestion-card">
-                            <h3>今日学习建议</h3>
-                            <div class="suggestion-content">
-                                <div class="suggestion-item">
-                                    <span class="suggestion-icon">📚</span>
-                                    <span>复习Vue.js组件通信</span>
-                                </div>
-                                <div class="suggestion-item">
-                                    <span class="suggestion-icon">💻</span>
-                                    <span>完成Todo应用练习</span>
-                                </div>
-                                <div class="suggestion-item">
-                                    <span class="suggestion-icon">📖</span>
-                                    <span>阅读Vue Router文档</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 学习进度 -->
-                        <div class="progress-card">
-                            <h3>学习进度</h3>
-                            <div class="progress-item">
-                                <span class="progress-label">Vue.js基础</span>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 85%"></div>
-                                </div>
-                                <span class="progress-percent">85%</span>
-                            </div>
-                            <div class="progress-item">
-                                <span class="progress-label">JavaScript进阶</span>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 70%"></div>
-                                </div>
-                                <span class="progress-percent">70%</span>
-                            </div>
-                            <div class="progress-item">
-                                <span class="progress-label">TypeScript</span>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 60%"></div>
-                                </div>
-                                <span class="progress-percent">60%</span>
-                            </div>
-                        </div>
-
-                        <!-- 常用功能 -->
-                        <div class="tools-card">
-                            <h3>常用工具</h3>
-                            <div class="tool-buttons">
-                                <button class="tool-btn" @click="generatePlan">
-                                    <span class="tool-icon">📋</span>
-                                    <span>生成学习计划</span>
-                                </button>
-                                <button class="tool-btn" @click="reviewKnowledge">
-                                    <span class="tool-icon">🔍</span>
-                                    <span>知识回顾</span>
-                                </button>
-                                <button class="tool-btn" @click="practiceTest">
-                                    <span class="tool-icon">🧪</span>
-                                    <span>模拟测试</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { getIsLoggedIn, getUser } from '../stores/userStore'
 
@@ -766,121 +612,12 @@ const recommendedCourses = [
     { id: 3, title: 'Node.js 后端开发', description: '构建高性能的Node.js服务器应用' }
 ]
 
-// AI导师相关数据
-const userInput = ref('')
-const chatMessages = ref([])
-const quickQuestions = [
-    'Vue.js组件如何通信？',
-    '什么是响应式编程？',
-    '如何学习TypeScript？',
-    '推荐前端学习路线'
-]
-
-// 发送消息
-const sendMessage = () => {
-    if (!userInput.value.trim()) return
-    
-    // 添加用户消息
-    const userMessage = {
-        type: 'user',
-        text: userInput.value,
-        time: '刚刚'
-    }
-    chatMessages.value.push(userMessage)
-    
-    // 清空输入框
-    const messageText = userInput.value
-    userInput.value = ''
-    
-    // 模拟AI回复（实际项目中应该调用API）
-    setTimeout(() => {
-        const aiResponse = generateAIResponse(messageText)
-        const aiMessage = {
-            type: 'ai',
-            text: aiResponse,
-            time: '刚刚'
-        }
-        chatMessages.value.push(aiMessage)
-        
-        // 滚动到底部
-        scrollToBottom()
-    }, 1000)
+// 跳转到智能导师页面
+const goToSmartTutor = () => {
+    router.push('/smart-tutor')
 }
-
-// 快速提问
-const askQuestion = (question: string) => {
-    userInput.value = question
-    sendMessage()
-}
-
-// 生成AI回复（模拟）
-const generateAIResponse = (userMessage: string) => {
-    const responses = {
-        'vue': 'Vue.js是一个渐进式JavaScript框架，用于构建用户界面。核心概念包括：\n• 响应式数据绑定\n• 组件化开发\n• 虚拟DOM\n• 生命周期钩子',
-        'typescript': 'TypeScript是JavaScript的超集，添加了静态类型检查。学习建议：\n1. 先掌握JavaScript基础\n2. 学习类型注解和接口\n3. 实践泛型和装饰器\n4. 结合框架使用',
-        '路线': '前端学习路线建议：\n1. HTML/CSS基础\n2. JavaScript核心语法\n3. Vue.js或React框架\n4. Node.js后端基础\n5. 工程化和部署',
-        '组件': 'Vue组件通信方式：\n• Props向下传递\n• $emit向上传递\n• Vuex/Pinia状态管理\n• Provide/Inject依赖注入\n• Event Bus事件总线'
-    }
-    
-    const lowerMessage = userMessage.toLowerCase()
-    for (const [key, response] of Object.entries(responses)) {
-        if (lowerMessage.includes(key)) {
-            return response
-        }
-    }
-    
-    return `关于"${userMessage}"，这是一个很好的问题！作为前端开发，建议您：\n1. 查阅官方文档\n2. 实践相关代码示例\n3. 参考社区最佳实践\n4. 遇到具体问题时可以继续问我`
-}
-
-// 滚动到底部
-const scrollToBottom = () => {
-    nextTick(() => {
-        const container = document.querySelector('.chat-messages')
-        if (container) {
-            container.scrollTop = container.scrollHeight
-        }
-    })
-}
-
-// 工具功能
-const generatePlan = () => {
-    const planMessage = {
-        type: 'ai',
-        text: '为您生成了个性化学习计划：\n\n📅 本周计划：\n• 周一：Vue组件通信\n• 周二：Vue Router路由\n• 周三：状态管理Vuex\n• 周四：项目实战\n• 周五：复习总结\n\n💡 建议每天学习2-3小时，结合实际项目练习。',
-        time: '刚刚'
-    }
-    chatMessages.value.push(planMessage)
-    scrollToBottom()
-}
-
-const reviewKnowledge = () => {
-    const reviewMessage = {
-        type: 'ai',
-        text: '知识回顾：\n\n📚 已掌握知识点：\n• HTML/CSS基础 (95%)\n• JavaScript核心 (85%)\n• Vue.js基础 (75%)\n\n🔍 需要加强：\n• Vue Router路由守卫\n• 组件生命周期\n• 性能优化技巧',
-        time: '刚刚'
-    }
-    chatMessages.value.push(reviewMessage)
-    scrollToBottom()
-}
-
-const practiceTest = () => {
-    const testMessage = {
-        type: 'ai',
-        text: '开始模拟测试：\n\n1. Vue组件中如何实现双向绑定？\n2. 什么是Vue的响应式原理？\n3. 如何优化Vue应用性能？\n\n请思考这些问题，我会在您回答后给出反馈和解析。',
-        time: '刚刚'
-    }
-    chatMessages.value.push(testMessage)
-    scrollToBottom()
-}
-
 
 // 全局消息函数
-// declare global {
-//     interface Window {
-//         showGlobalMessage: (text: string, type?: string) => void
-//     }
-// }
-
 const showGlobalMessage = (text: string, type: string = 'success') => {
     if (window.showGlobalMessage) {
         window.showGlobalMessage(text, type)

@@ -108,11 +108,7 @@ const goToRegister = () => {
     router.push('/register')
 }
 
-// 全局消息函数声明（优先使用 window.showGlobalMessage）
-// declare global {
-//     interface Window { showGlobalMessage?: (text: string, type?: string) => void }
-// }
-
+// 全局消息函数
 const showGlobalMessage = (text: string, type: string = 'success') => {
     // @ts-ignore
     if (typeof window.showGlobalMessage === 'function') {

@@ -15,10 +15,10 @@
       <!-- 中间标题部分（绝对居中） -->
       <div class="nav-center">
         <span class="logo" @click="goToHome" style="cursor: pointer">COCO</span>
-        <!-- 欢迎信息：仅在登录时显示 -->
+        <!-- 欢迎信息：仅在登录时显示
         <span v-if="isLoggedIn && currentUser" class="welcome-text">
           欢迎, {{ currentUser.username }}
-        </span>
+        </span> -->
       </div>
       
       <!-- 用户按钮、登出按钮和下拉菜单 -->

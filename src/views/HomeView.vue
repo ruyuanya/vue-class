@@ -53,31 +53,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { getIsLoggedIn } from '../stores/userStore' // 新增
+import { getIsLoggedIn } from '../stores/userStore'
 
 const router = useRouter()
-const showUserMenu = ref(false)
-
-const toggleUserMenu = () => {
-  showUserMenu.value = !showUserMenu.value
-}
-
-const gotoLogin = () => {
-  showUserMenu.value = false
-  router.push('/login')
-}
-
-const goToRegister = () => {
-  showUserMenu.value = false
-  router.push('/register')
-}
 
 const goToMassiveTeaching = () => {
-  // 点击大规模因材施教时优先检查登录状态
   if (!getIsLoggedIn()) {
-    // 跳转到登录页并携带重定向信息
     router.push({ name: 'Login', query: { redirect: '/massive-teaching' } })
     return
   }
@@ -85,140 +67,15 @@ const goToMassiveTeaching = () => {
 }
 
 const goToAdaptiveStudy = () => {
-  // 点击自适应学习时优先检查登录状态
   if (!getIsLoggedIn()) {
-    // 跳转到登录页并携带重定向信息
     router.push({ name: 'Login', query: { redirect: '/adaptive-study' } })
     return
   }
   router.push('/adaptive-study')
 }
-
-// 点击页面其他地方关闭下拉菜单
-const closeUserMenu = (event: MouseEvent) => {
-  const target = event.target as HTMLElement
-  if (!target.closest('.user-menu-container')) {
-    showUserMenu.value = false
-  }
-}
-
-// 添加全局点击事件监听
-document.addEventListener('click', closeUserMenu)
 </script>
 
 <style scoped>
-/* 顶部导航栏 */
-.top-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  padding: 10px 0;
-}
-
-.nav-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-}
-/* 左侧占位元素，用于平衡布局 */
-.nav-left {
-  width: 120px;/* 与右侧占位元素宽度一致 */
-}
-/* 中间标题部分 */
-.nav-center {
-text-align: center;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-/* 用户菜单容器 */
-.user-menu-container {
-  position: relative;
-}
-
-/* 用户按钮 */
-.user-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: hwb(160 10% 25%);
-  color: white;
-  border: none;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.user-btn:hover {
-  background: hwb(160 5% 20%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.user-icon, .dropdown-icon {
-  width: 16px;
-  height: 16px;
-}
-
-.dropdown-icon {
-  transition: transform 0.3s ease;
-}
-
-.user-btn:hover .dropdown-icon {
-  transform: rotate(180deg);
-}
-
-/* 下拉菜单 */
-.user-dropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  min-width: 120px;
-  margin-top: 5px;
-  z-index: 1001;
-  overflow: hidden;
-}
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 12px 16px;
-  background: none;
-  border: none;
-  color: #333;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.dropdown-item:hover {
-  background: #f5f5f5;
-}
-
-.dropdown-item .dropdown-icon {
-  width: 14px;
-  height: 14px;
-  color: #666;
-}
-
 /* 主要内容区域 */
 .main-content {
   margin-top: 120px;

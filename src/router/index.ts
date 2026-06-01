@@ -3,6 +3,7 @@ import Home from '../views/HomeView.vue'
 import MassiveTeaching from '../views/MassiveTeaching.vue'
 import AdaptiveStudy from '../views/AdaptiveStudy.vue'
 import WorkspaceView from '../views/WorkspaceView.vue'
+import SmartTutorView from '../views/SmartTutorView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import CourseDetail from '../views/CourseDetail.vue'
@@ -47,6 +48,12 @@ const router = createRouter({
       path: '/workspace',
       name: 'Workspace',
       component: WorkspaceView,
+    },
+    {
+      path: '/smart-tutor',
+      name: 'SmartTutor',
+      component: SmartTutorView,
+      meta: { requiresAuth: true }
     },
     {
       path: '/login',
